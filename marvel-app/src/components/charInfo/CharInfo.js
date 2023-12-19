@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import MarvelService from "../../services/MarvelService";
@@ -9,40 +9,34 @@ import Skeleton from "../skeleton/Skeleton";
 
 import "./charInfo.scss";
 
-class CharInfo extends Component {
-  state = {
-    char: null,
-    loading: false,
-    error: false,
-  };
+const CharInfo = (props) => {
 
-  marvelService = new MarvelService();
+  const [char, setChar] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false)
+  
+  const marvelService = new MarvelService();
 
-  componentDidMount() {
-    this.updateChar();
-  }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.charId !== prevProps.charId) {
-      this.updateChar();
-    }
-  }
-
-  updateChar = () => {
-    const { charId } = this.props;
+    useEffect(() => {
+    updateChar();
+  }, [props.charId]);
+  
+  const updateChar = () => {
+    const { charId } = props;
 
     if (!charId) {
       return;
     }
-    this.onCharLoading();
+    onCharLoading();
 
-    this.marvelService
+    marvelService
       .getCharacter(charId)
-      .then(this.onCharLoaded)
-      .catch(this.onError);
+      .then(onCharLoaded)
+      .catch(onError);
   };
 
-  onCharLoaded = (char) => {
+  const onCharLoaded = (char) => {
     if (char.description === "") {
       char.description = "We have no information about this character";
     }
@@ -53,27 +47,22 @@ class CharInfo extends Component {
 
       char.description = truncatedDescription + "...";
 
-      this.setState({ char, loading: false });
+      setChar(char)
+      setLoading(loading => false)
     } else {
-      this.setState({ char, loading: false });
+      setChar(char)
+      setLoading(loading => false)
     }
   };
 
-  onCharLoading = () => {
-    this.setState({
-      loading: true,
-    });
+  const onCharLoading = () => {
+    setLoading(loading => true)
   };
 
-  onError = () => {
-    this.setState({
-      loading: false,
-      error: true,
-    });
+  const onError = () => {
+    setLoading(false);
+    setError(true)
   };
-
-  render() {
-    const { char, loading, error } = this.state;
 
     const skeleton = char || loading || error ? null : <Skeleton />;
     const errorMessage = error ? <ErrorMessage /> : null;
@@ -89,7 +78,6 @@ class CharInfo extends Component {
       </div>
     );
   }
-}
 
 const View = ({ char }) => {
   const { name, description, thumbnail, homepage, wiki, comics } = char;
