@@ -8,11 +8,12 @@ import AppBanner from "../appBanner/AppBanner";
 const SinglePage = ({ Component, dataType }) => {
   const { id } = useParams();
   const [data, setData] = useState(null);
-  const {getComic, getCharacter, clearError, process, setProcess } =
+  const { getComic, getCharacter, clearError, process, setProcess } =
     useMarvelService();
 
   useEffect(() => {
     updateData();
+    // eslint-disable-next-line
   }, [id]);
 
   const updateData = () => {
@@ -28,6 +29,9 @@ const SinglePage = ({ Component, dataType }) => {
         getCharacter(id)
           .then(onDataLoaded)
           .then(() => setProcess("confirmed"));
+        break;
+      default:
+        throw new Error("Unexpected case");
     }
   };
 
@@ -35,10 +39,10 @@ const SinglePage = ({ Component, dataType }) => {
     setData(data);
   };
 
-   return (
+  return (
     <>
       <AppBanner />
-       {setContent(process, Component, data)}
+      {setContent(process, Component, data)}
     </>
   );
 };

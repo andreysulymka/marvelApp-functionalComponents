@@ -1,8 +1,8 @@
 {
   "name": "marvel-app",
   "version": "0.1.0",
-  "homepage": "https://andreysulymka.github.io/marvelApp",
-  "private": true,
+  "homepage": "https://andreysulymka.github.io/marvelApp-functionalComponent",
+    "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -45,6 +45,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "6.1.0"
+    "gh-pages": "^6.1.0"
   }
 }
